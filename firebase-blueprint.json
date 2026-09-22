@@ -1,0 +1,121 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Perfil de usuario registrado en TechSearch Edu",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "name": { "type": "string" },
+        "role": { "type": "string", "enum": ["estudiante", "docente"] },
+        "avatarColor": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "email", "name", "role"]
+    },
+    "SavedSearch": {
+      "title": "SavedSearch",
+      "description": "Consulta de búsqueda guardada por un estudiante o docente",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "name": { "type": "string" },
+        "query": { "type": "string" },
+        "engine": { "type": "string", "enum": ["google", "duckduckgo", "bing"] },
+        "notes": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "userId", "name", "query"]
+    },
+    "CuratedQuery": {
+      "title": "CuratedQuery",
+      "description": "Consulta curada y recomendada por docentes",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "category": { "type": "string" },
+        "query": { "type": "string" },
+        "engine": { "type": "string" },
+        "createdBy": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "title", "query", "category"]
+    },
+    "CustomGlossaryTerm": {
+      "title": "CustomGlossaryTerm",
+      "description": "Término tecnológico añadido al glosario colaborativo",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "term": { "type": "string" },
+        "acronym": { "type": "string" },
+        "definition": { "type": "string" },
+        "technicalDetails": { "type": "string" },
+        "category": { "type": "string" },
+        "createdBy": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "term", "definition", "category"]
+    },
+    "StudentProgress": {
+      "title": "StudentProgress",
+      "description": "Registro de avance pedagógico del estudiante",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "completedGuideSteps": { "type": "array" },
+        "favoriteTechIds": { "type": "array" },
+        "favoriteOperatorIds": { "type": "array" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "userId"]
+    },
+    "AstralChat": {
+      "title": "AstralChat",
+      "description": "Conversación del agente Astral.ai guardada en Firestore",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "createdAt": { "type": "number" },
+        "updatedAt": { "type": "number" },
+        "messages": { "type": "array" },
+        "model": { "type": "string" },
+        "persona": { "type": "string" },
+        "useSearchGrounding": { "type": "boolean" }
+      },
+      "required": ["id", "title", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "UserProfile" },
+      "description": "Perfiles de usuarios autenticados"
+    },
+    "/users/{userId}/chats/{chatId}": {
+      "schema": { "$ref": "AstralChat" },
+      "description": "Conversaciones privadas de Astral.ai de cada usuario"
+    },
+    "/users/{userId}/savedSearches/{searchId}": {
+      "schema": { "$ref": "SavedSearch" },
+      "description": "Consultas guardadas privadas de cada usuario"
+    },
+    "/users/{userId}/progress/{progressId}": {
+      "schema": { "$ref": "StudentProgress" },
+      "description": "Progreso y favoritos del estudiante"
+    },
+    "/curatedQueries/{queryId}": {
+      "schema": { "$ref": "CuratedQuery" },
+      "description": "Consultas curadas compartidas por docentes para la comunidad"
+    },
+    "/customGlossaryTerms/{termId}": {
+      "schema": { "$ref": "CustomGlossaryTerm" },
+      "description": "Términos comunitarios del diccionario tecnológico"
+    }
+  }
+}

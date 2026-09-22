@@ -1,0 +1,7 @@
+{
+  "name": "Tecnologías Digitales y Búsqueda Inteligente",
+  "description": "Astral.ai: Agente de Inteligencia Artificial avanzado con capacidades multimodales, búsqueda web en tiempo real, análisis visual y razonamiento profundo.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+

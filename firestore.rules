@@ -1,0 +1,50 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // User profiles
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow write: if isOwner(userId);
+
+      // Private saved searches
+      match /savedSearches/{searchId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      // Private chats for Astral.ai
+      match /chats/{chatId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      // Private student progress
+      match /progress/{progressId} {
+        allow read, write: if isOwner(userId);
+      }
+    }
+
+    // Curated queries (educational community)
+    match /curatedQueries/{queryId} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    // Custom glossary terms (community dictionary)
+    match /customGlossaryTerms/{termId} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    // Test connection doc
+    match /test/{docId} {
+      allow read, write: if true;
+    }
+  }
+}
